@@ -60,7 +60,7 @@ contract AirVault is Ownable {
      * @param amount Amount to withdraw
      * @return bool
      */
-	function withdraw(uint256 amount) public returns(bool) {
+    function withdraw(uint256 amount) public returns(bool) {
         // Check locked balance first
         require(lockedBalance[msg.sender] >= amount, 'AirVault: Not enough tokens locked');
 
@@ -81,7 +81,7 @@ contract AirVault is Ownable {
      * @param account Winner :)
      * @return uint256 Balance
      */
-	function lockedBalanceOf(address account) external view returns(uint256) {
+    function lockedBalanceOf(address account) external view returns(uint256) {
         return lockedBalance[account];
     }
 }
