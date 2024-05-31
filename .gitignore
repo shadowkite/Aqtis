@@ -9,3 +9,6 @@ typechain-types
 cache
 artifacts
 
+# Python VENV
+lib/python3.11
+bin

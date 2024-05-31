@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-interface FudToken {
+interface IFudToken {
 	// ... standard ERC20 interface
 }
 
@@ -9,14 +9,14 @@ interface FudToken {
  * Provided interfaces by Aqtis challenge for quick access
  */
 
-interface WinToken {
+interface IWinToken {
 	// ... standard ERC20 interface
 	
 	// the WIN token is also mintable, so we include the following with the onlyMinter modifier
 	function mint(address account, uint256 amount) external returns(bool);
 }
 
-interface AirVault {
+interface IAirVault {
 	// lock tokens in the AirVault contract
 	function deposit(uint256 amount) external returns(bool);
 

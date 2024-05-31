@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 // Import token
 import "./Fud.sol";
-import "./Win.sol";
 
 /**
  * AirVault
@@ -15,20 +14,27 @@ import "./Win.sol";
 contract AirVault is Ownable {
 
     /** Events */
-    event AirVaultDeposit(address winner, uint256 amountDeposited, uint256 newBalance);
-    event AirVaultWithdraw(address winner, uint256 amountWithdrawn, uint256 newBalance);
+    event AirVaultDeposit(
+        address winner, 
+        uint256 amountDeposited, 
+        uint256 newBalance
+    );
+
+    event AirVaultWithdraw(
+        address winner, 
+        uint256 amountWithdrawn, 
+        uint256 newBalance
+    );
 
     /** Balance storage */
     mapping(address => uint256) lockedBalance;
 
-    /** Token addresses */
-    Win winToken;
+    /** Token address */
     Fud fudToken;
 
-    /** Constructor; Requires token addresses */
-    constructor(address fud, address win) Ownable(msg.sender) {
+    /** Constructor; Requires token address */
+    constructor(address fud) Ownable(msg.sender) {
         fudToken = Fud(fud);
-        winToken = Win(win);
     }
     
     /**
@@ -38,8 +44,7 @@ contract AirVault is Ownable {
      */
     function deposit(uint256 amount) public returns(bool) {
         // Try transfer - should revert
-        bool transferred = fudToken.transferFrom(msg.sender, address(this), amount);
-        require(transferred, 'AirVault: Unable to deposit');
+        fudToken.transferFrom(msg.sender, address(this), amount);
 
         // Register new balance amount
         lockedBalance[msg.sender] += amount;
@@ -53,17 +58,17 @@ contract AirVault is Ownable {
     /**
      * Withdraws locked balance
      * @param amount Amount to withdraw
+     * @return bool
      */
 	function withdraw(uint256 amount) public returns(bool) {
         // Check locked balance first
-        require(lockedBalance[msg.sender] <= amount, 'AirVault: Not enough tokens locked');
+        require(lockedBalance[msg.sender] >= amount, 'AirVault: Not enough tokens locked');
 
-        // Deduct balance
+        // Deduct balance first
         lockedBalance[msg.sender] -= amount;
 
-        // Attempt transfer - should revert
-        bool transferred = fudToken.transferFrom(msg.sender, address(this), amount);
-        require(transferred, 'AirVault: Unable to withdraw');
+        // Send tokens
+        fudToken.transfer(msg.sender, amount);
 
         // Emit event
         emit AirVaultWithdraw(msg.sender, amount, lockedBalance[msg.sender]);
@@ -74,6 +79,7 @@ contract AirVault is Ownable {
     /**
      * Returns the current locked balance
      * @param account Winner :)
+     * @return uint256 Balance
      */
 	function lockedBalanceOf(address account) external view returns(uint256) {
         return lockedBalance[account];
