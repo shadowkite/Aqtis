@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-interface IFudToken {
-	// ... standard ERC20 interface
-}
-
 /**
  * Provided interfaces by Aqtis challenge for quick access
  */
+
+interface IFudToken {
+	// ... standard ERC20 interface
+}
 
 interface IWinToken {
 	// ... standard ERC20 interface
